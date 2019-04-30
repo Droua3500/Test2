@@ -1,0 +1,45 @@
+#Andrew D
+#30/04/2019
+#T2DvA
+
+import pygame, random#Get pygame
+screen = pygame.display.set_mode([800, 800])#screen 800*800
+clock = pygame.time.Clock()#set clock for update
+class Smiley(pygame.sprite.Sprite):#class
+    def __init__(self, pos):
+        self.xvel = random.randint(1,10)#random velocity between 1 and 9
+        self.yvel = random.randint(1,10)
+        self.posx=pos[0]#get the x component of position
+        self.posy=pos[1]
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("basketball1.jpg")#load basketball image
+        self.scale = random.randrange(10,100)#get a random size for the ball
+        self.image = pygame.transform.scale(self.image, (self.scale, self.scale))#resize the ball to that scale
+        screen.blit(self.image,pos)#blit for first time
+
+
+    def update(self,screen):#gets new velocity and blits
+
+     self.posx += self.xvel#get new pos using velocity
+     self.posy += self.yvel
+     if self.posx>800-self.scale or self.posx<0:#if at x edges of screen
+        self.xvel = -self.xvel#invert velocity(go backwards)
+     if self.posy<0 or self.posy>800-self.scale:#if at y edges of screen
+        self.yvel = -self.yvel
+     screen.blit(self.image,(self.posx,self.posy))#redraw
+
+
+pygame.display.set_caption("Test2")
+
+
+numball=20#Change this for number of images on screen
+balls=[Smiley((random.randint(0,500),random.randint(0,500))) for i in range (numball)]#create all the instances of the
+#balls
+
+
+
+while True:
+    screen.fill((255, 255, 255))#refresh screen
+    for x in range (numball):#draw all the balls
+        balls[x].update(screen)#get new position,blit
+    pygame.display.flip()#flip display
